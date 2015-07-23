@@ -79,6 +79,8 @@ for link in links:
                 filename = entity_id + "_" + csvYr + "_" + csvMth
                 todays_date = str(datetime.now())
                 file_url = url_csv.strip()
+                if 'IDOC' in file_url:
+                    continue
                 validFilename = validateFilename(filename)
                 validURL, validFiletype = validateURL(file_url)
                 if not validFilename:
@@ -109,6 +111,8 @@ for link in links:
             filename = entity_id + "_" + csvYr + "_" + csvMth
             todays_date = str(datetime.now())
             file_url = url.strip()
+            if 'IDOC' in file_url:
+                    continue
             validFilename = validateFilename(filename)
             validURL, validFiletype = validateURL(file_url)
             if not validFilename:
