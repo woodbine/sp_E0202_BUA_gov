@@ -58,7 +58,7 @@ def convert_mth_strings ( mth_string ):
     return mth_string
 # pull down the content from the webpage
 html = urllib2.urlopen(url)
-soup = BeautifulSoup(html)
+soup = BeautifulSoup(html, 'lxml')
 # find all entries with the required class
 block = soup.find('div', attrs = {'id':'main'})
 links = block.findAll('a', href=True)
@@ -66,7 +66,7 @@ for link in links:
     if 'Supplier Payments' in link.text:
         url_csv = 'http://www.bedford.gov.uk' + link['href']
         html_csv = urllib2.urlopen(url_csv)
-        soup_csv = BeautifulSoup(html_csv)
+        soup_csv = BeautifulSoup(html_csv, 'lxml')
         block_csv = soup_csv.find('div', attrs = {'id':'main'})
         links = block_csv.findAll('a', href=True)
         for link in links:
