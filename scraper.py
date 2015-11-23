@@ -101,13 +101,14 @@ soup = BeautifulSoup(html, "lxml")
 block = soup.find('div', attrs = {'id':'main'})
 links = block.findAll('a', href=True)
 for link in links:
-    if 'Supplier Payments' in link.text:
+    if 'Supplier' in link.text:
         url_csv = 'http://www.bedford.gov.uk' + link['href']
         html_csv = urllib2.urlopen(url_csv)
         soup_csv = BeautifulSoup(html_csv, 'lxml')
         block_csv = soup_csv.find('div', attrs = {'id':'main'})
         links = block_csv.findAll('a', href=True)
         for link in links:
+
             if 'Excel' in link.text:
                 url = 'http://www.bedford.gov.uk/council_and_democracy/council_budgets_and_spending/' + link['href']
                 csvfile = link.text
