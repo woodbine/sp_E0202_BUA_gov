@@ -98,30 +98,32 @@ soup = BeautifulSoup(html, "lxml")
 
 #### SCRAPE DATA
 
-block = soup.find('div', attrs = {'id':'main'})
-links = block.findAll('a', href=True)
+block = soup.find('div', id='leftWrapper').find('a', title='Supplier Payments').find_next('ul')
+links = block.find_all('a', href=True)
 for link in links:
     if 'Supplier' in link.text:
         url_csv = 'http://www.bedford.gov.uk' + link['href']
         html_csv = urllib2.urlopen(url_csv)
         soup_csv = BeautifulSoup(html_csv, 'lxml')
         block_csv = soup_csv.find('div', attrs = {'id':'main'})
-        links = block_csv.findAll('a', href=True)
-        for link in links:
-
-            if 'Excel' in link.text:
-                url = 'http://www.bedford.gov.uk/council_and_democracy/council_budgets_and_spending/' + link['href']
-                csvfile = link.text
-                csvMth = csvfile.replace(u'\n', ' ').split(' ')[0][:3]
-                csvYr = csvfile.replace(u'\n', ' ').split(' ')[1][:4]
+        links_csv = block_csv.findAll('a', href=True)
+        for link_csv in links_csv:
+            if 'Excel' in link_csv.text:
+                url_ = 'http://www.bedford.gov.uk/council_and_democracy/council_budgets_and_spending/' + link_csv['href']
+                csvfile_csv = link_csv.text
+                csvMth = csvfile_csv.replace(u'\n', ' ').split(' ')[0][:3]
+                csvYr = csvfile_csv.replace(u'\n', ' ').split(' ')[1][:4].strip()
                 csvMth = convert_mth_strings(csvMth.upper())
-                data.append([csvYr, csvMth, url])
-    elif 'Excel' in link.text:
+                data.append([csvYr, csvMth, url_])
+block = soup.find('div', id='main').find('strong', 'ImmUnderline_On')
+links = block.find_all_previous('a', href=True)
+for link in links:
+    if 'Excel' in link.text:
         url = 'http://www.bedford.gov.uk/council_and_democracy/council_budgets_and_spending/' + link['href']
         if ',' not in link.text:
             csvfile = link.text.strip()
             csvMth = csvfile.replace(u'\n', ' ').split(' ')[0][:3]
-            csvYr = csvfile.replace(u'\n', ' ').split(' ')[1][:4]
+            csvYr = csvfile.replace(u'\n', ' ').split(' ')[1][:4].strip()
             csvMth = convert_mth_strings(csvMth.upper())
             data.append([csvYr, csvMth, url])
 
